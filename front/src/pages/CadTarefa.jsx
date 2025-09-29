@@ -1,14 +1,14 @@
-import axios from 'axios';//eh o hook que faz comunicação com a internet (http)
+import axios from 'axios'; // eh o hook que faz comunicação com a internet (http)
 /**
  * hooks que permite a validação de interação com o usuário
  * NUNCA DUVIDE DA CAPACIDADE DO USUARIO
  * react é comum ver o zod
  */
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';//Hook determinado pela palavra (use) na frente
-import { z } from 'zod';//zod é uma descrição de como eu validar, quais serial as regras
-import { zodResolver } from '@hookform/resolvers/zod';//é o que liga o hook form com o zod
-import { useNavigate } from 'react-router-dom';//permite navegar entre as páginas
+import { useForm } from 'react-hook-form'; // Hook determinado pela palavra (use) na frente
+import { z } from 'zod'; // zod é uma descrição de como eu validar, quais serial as regras
+import { zodResolver } from '@hookform/resolvers/zod'; // é o que liga o hook form com o zod
+import { useNavigate } from 'react-router-dom'; // permite navegar entre as páginas
 
 const schemaCadTarefa = z.object({
     desc_tarefa: z.string()
@@ -33,17 +33,17 @@ const schemaCadTarefa = z.object({
     }).int().positive("ID do usuário inválido"), // espera id do usuário
 });
 
-export function CadTarefa(){
+export function CadTarefa() {
     const [usuarios, setUsuarios] = useState([]);
     const navigate = useNavigate();
 
-     const {
-        register, //registra pra mim oq o usuario faz
-        handleSubmit,//no momento em que ele der um submit (botao)
-        formState: { errors },// no formulario, se der ruim guarda os errosna variavel errors
+    const {
+        register, // registra pra mim oq o usuario faz
+        handleSubmit, // no momento em que ele der um submit (botao)
+        formState: { errors }, // no formulario, se der ruim guarda os erros na variavel errors
         reset
     } = useForm({
-        resolver: zodResolver(schemaCadTarefa),//para validar eu chamo o resolver
+        resolver: zodResolver(schemaCadTarefa), // para validar eu chamo o resolver
         defaultValues: {
             status: 'a fazer'
         }
@@ -51,84 +51,106 @@ export function CadTarefa(){
 
     useEffect(() => {
         async function buscarUsuario() {
-            try{
-                const response = await axios.get('http://127.0.0.1:8000/usuario/') 
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/usuario/')
                 setUsuarios(response.data);
-
-            }catch(error){
+            } catch (error) {
                 console.error("erro", error);
             }
         }
-        buscarUsuario(); //chamando minha função para chamar usuarios
+        buscarUsuario(); // chamando minha função para chamar usuarios
     }, [])
 
     async function obterDados(data) {
         console.log("dados da tarefa informado pelo usuario: ", data)
 
-        try{
+        try {
             await axios.post("http://127.0.0.1:8000/tarefa/", data);
-            alert("Tarefa cadastrada com sucesso"); 
-            reset(); ///limpo meu form
-            navigate('/') //depois de cadastrar a tarefa, levo o usuario para o quadro
-        } catch (error){
+            alert("Tarefa cadastrada com sucesso");
+            reset(); /// limpo meu form
+            navigate('/') // depois de cadastrar a tarefa, levo o usuario para o quadro
+        } catch (error) {
             alert("Erro no cadastro da tarefa. Verifique as informações")
             console.log("Erros", error)
             console.log(error.response.data)
         }
     }
 
-    return(
-        <form className='formularios' onSubmit={handleSubmit(obterDados)}>
-            <h2> Cadastro de Tarefas </h2>
+    return (
+        <form className='formularios' onSubmit={handleSubmit(obterDados)} aria-labelledby="form-cadastro-tarefa">
+            <h2 id="form-cadastro-tarefa"> Cadastro de Tarefas </h2>
 
-            <label>Nome do usuário </label>
+            {/* Nome do usuário */}
+            <label htmlFor="usuario">Nome do usuário </label>
             <select
-                {...register('usuario', { valueAsNumber: true })}>
-                    <option>Selecione o usuário </option>
-                        {usuarios.map((user) => (
-                            <option key={user.id} value={user.id}>
-                                {user.nome}
-                            </option>
-                ))} 
+                id="usuario"
+                {...register('usuario', { valueAsNumber: true })}
+                aria-invalid={errors.usuario ? "true" : "false"}
+                aria-describedby={errors.usuario ? "usuario-error" : undefined}
+            >
+                <option value="">Selecione o usuário</option>
+                {usuarios.map((user) => (
+                    <option key={user.id} value={user.id}>
+                        {user.nome}
+                    </option>
+                ))}
             </select>
-            {/* aqui eu vejo a variavel erros no campo nome e exibo a mensagem de erro para o usuario */}
-            {errors.usuario && <p className= 'errors'>{errors.usuario.message}</p>}
+            {errors.usuario && <p id="usuario-error" className='errors'>{errors.usuario.message}</p>}
 
-            <label>Descrição: </label>
-            <input 
-            type="text" 
-            {...register("desc_tarefa")} />
-            {errors.descricao && <p className= 'errors'> {errors.descricao.message}</p>}
-
-            <label>Nome do setor: </label>
-            <input 
-                type="text" 
-                {...register("nome_setor")}
-                placeholder='trabalho' 
+            {/* Descrição da tarefa */}
+            <label htmlFor="desc_tarefa">Descrição: </label>
+            <input
+                type="text"
+                id="desc_tarefa"
+                {...register("desc_tarefa")}
+                aria-invalid={errors.desc_tarefa ? "true" : "false"}
+                aria-describedby={errors.desc_tarefa ? "desc_tarefa-error" : undefined}
             />
-            {errors.nomeSetor && <p className= 'errors'> {errors.nomeSetor.message}</p>}
+            {errors.desc_tarefa && <p id="desc_tarefa-error" className='errors'> {errors.desc_tarefa.message}</p>}
 
-            <label>Prioridade: </label>
-            <select {...register("prioridade")}>
+            {/* Nome do setor */}
+            <label htmlFor="nome_setor">Nome do setor: </label>
+            <input
+                type="text"
+                id="nome_setor"
+                {...register("nome_setor")}
+                placeholder='trabalho'
+                aria-invalid={errors.nome_setor ? "true" : "false"}
+                aria-describedby={errors.nome_setor ? "nome_setor-error" : undefined}
+            />
+            {errors.nome_setor && <p id="nome_setor-error" className='errors'> {errors.nome_setor.message}</p>}
+
+            {/* Prioridade */}
+            <label htmlFor="prioridade">Prioridade: </label>
+            <select
+                id="prioridade"
+                {...register("prioridade")}
+                aria-invalid={errors.prioridade ? "true" : "false"}
+                aria-describedby={errors.prioridade ? "prioridade-error" : undefined}
+            >
                 <option value=""> Selecione o nível de prioridade</option>
                 <option value="baixa">Baixa</option>
                 <option value="media">Media</option>
                 <option value="alta">Alta</option>
             </select>
-            {errors.prioridade && <p className= 'errors'> {errors.prioridade.message}</p>}
+            {errors.prioridade && <p id="prioridade-error" className='errors'> {errors.prioridade.message}</p>}
 
-            <label>Status: </label>
-            <select {...register("status")}>
+            {/* Status */}
+            <label htmlFor="status">Status: </label>
+            <select
+                id="status"
+                {...register("status")}
+                aria-invalid={errors.status ? "true" : "false"}
+                aria-describedby={errors.status ? "status-error" : undefined}
+            >
                 <option value=""> Selecione o status da tarefa</option>
                 <option value="a fazer">Fazer</option>
                 <option value="fazendo">Fazendo</option>
                 <option value="pronto">Feito</option>
             </select>
-            {errors.status && <p className= 'errors'> {errors.status.message}</p>}
+            {errors.status && <p id="status-error" className='errors'> {errors.status.message}</p>}
 
             <button type='submit'>Cadastrar tarefa</button>
-
         </form>
     )
-  
 }

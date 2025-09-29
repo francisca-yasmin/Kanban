@@ -11,20 +11,25 @@
   font-family: 'Segoe UI', sans-serif;
 
   dl {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr; /* label e valor lado a lado */
+    gap: 4px 8px; /* espaço entre linhas e colunas */
 
     dt {
       font-weight: bold;
-      color: #475569;
+      margin: 0;
+      //color: #475569;
     }
 
     dd {
-      margin: 0 0 5px 0;
-      color: #334155;
+      margin: 0 0 5px;
+      //color: #334155;
     }
+  }
+
+  .header_tarefa{
+    cursor: grab;
+    margin: 0 0 5px;
   }
 
   button {
