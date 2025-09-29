@@ -6,20 +6,17 @@ export function Coluna({ id, titulo, tarefas = [] }) {
     const { setNodeRef } = useDroppable({ id });
 
     return (
-        <section
+       <section
             className="coluna"
             ref={setNodeRef}
-            role="region"
             aria-labelledby={`coluna-${id}-titulo`}
-            aria-dropeffect="move"
         >
             <h2 id={`coluna-${id}-titulo`} className="titulo">{titulo}</h2>
-            <div role="list">
+            <ul>
                 {tarefas.map(tarefa => {
-                    console.log("Renderizando:", tarefa);
                     return <Tarefa key={tarefa.id} tarefa={tarefa} />;
                 })}
-            </div>
+            </ul>
         </section>
     );
 }

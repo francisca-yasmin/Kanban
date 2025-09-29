@@ -1,14 +1,15 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // fazendo o uso do drag
 import { useDraggable } from "@dnd-kit/core"; // usando a biblioteca de arrastar
 
 export function Tarefa({ tarefa }) {
     const [status, setStatus] = useState(tarefa.status || "");
+    const [usuario, setUsuario] = useState(null);
     const navigate = useNavigate();
 
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: tarefa.id,
     });
 
@@ -51,47 +52,51 @@ export function Tarefa({ tarefa }) {
     return (
         // configurar bonitinhos cluninhas
         // ... => serve para desconpactar arrays - tranformando cada atributo do array em uma variavel única
-        <article
+        <li
             className="tarefa"
             ref={setNodeRef}
             style={style}
-            role="listitem"
-            aria-labelledby={`tarefa-${tarefa.id}`}
+            aria-label={`Tarefa: ${tarefa.titulo}`}
             tabIndex={0}
-            aria-grabbed="false"
         >
+            <article>
 
-            <header className="header_tarefa" {...listeners} {...attributes}>
-                <h3 id={`tarefa-${tarefa.id}`}>{tarefa.desc_tarefa}</h3>
-            </header>
+                <header  className={isDragging ? "dragging" : ""} 
+                {...listeners} {...attributes} tabIndex={0}>
+                    <h3 id={`tarefa-${tarefa.id}`}>{tarefa.desc_tarefa}</h3>
+                </header>
 
-            {/* dl -> lista de detalhes == dd -> detalhe do detalhe */}
-            <dl>
-                <dt>Setor:</dt>
-                <dd>{tarefa.nome_setor}</dd>
+                {/* dl -> lista de detalhes == dd -> detalhe do detalhe */}
+                <dl>
+                    <dt>Setor:</dt>
+                    <dd>{tarefa.nome_setor}</dd>
 
-                <dt>Prioridade:</dt>
-                <dd>{tarefa.prioridade}</dd>
-            </dl>
+                    <dt>Prioridade:</dt>
+                    <dd>{tarefa.prioridade}</dd>
 
-            <button type="button" onClick={() => navigate(`/editarTarefa/${tarefa.id}`)}>Editar</button>
-            <button type="button" onClick={() => excluirTarefa(tarefa.id)}>Excluir </button>
+                    <dt>Vinculado:</dt>
+                    <dd>{tarefa.usuario?.nome}</dd>
+                </dl>
 
-            <form>
-                <label htmlFor={`status-${tarefa.id}`}>Status:</label>
-                <select
-                    id={`status-${tarefa.id}`}
-                    name='status'
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                >
-                    <option value="">Selecione o status</option>
-                    <option value="a fazer">A Fazer</option>
-                    <option value="fazendo">Fazendo</option>
-                    <option value="pronto">Pronto</option>
-                </select>
-                <button type="button" onClick={alterarStatus}>Alterar status</button>
-            </form>
-        </article>
+                <button type="button" onClick={() => navigate(`/editarTarefa/${tarefa.id}`)}>Editar</button>
+                <button type="button" onClick={() => excluirTarefa(tarefa.id)}>Excluir </button>
+
+                <form>
+                    <label htmlFor={`status-${tarefa.id}`}>Status:</label>
+                    <select
+                        id={`status-${tarefa.id}`}
+                        name='status'
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                    >
+                        <option value="">Selecione o status</option>
+                        <option value="a fazer">A Fazer</option>
+                        <option value="fazendo">Fazendo</option>
+                        <option value="pronto">Pronto</option>
+                    </select>
+                    <button type="button" onClick={alterarStatus}>Alterar status</button>
+                </form>
+            </article>
+        </li>
     );
 }

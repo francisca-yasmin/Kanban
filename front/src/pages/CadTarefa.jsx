@@ -28,7 +28,7 @@ const schemaCadTarefa = z.object({
         errorMap: () => ({ message: 'Status inválido' })
     }),
 
-    usuario: z.number({
+    usuario_id: z.number({
         required_error: "Selecione um usuário"
     }).int().positive("ID do usuário inválido"), // espera id do usuário
 });
@@ -84,7 +84,7 @@ export function CadTarefa() {
             <label htmlFor="usuario">Nome do usuário </label>
             <select
                 id="usuario"
-                {...register('usuario', { valueAsNumber: true })}
+                {...register('usuario_id', { valueAsNumber: true })}
                 aria-invalid={errors.usuario ? "true" : "false"}
                 aria-describedby={errors.usuario ? "usuario-error" : undefined}
             >
@@ -102,6 +102,7 @@ export function CadTarefa() {
             <input
                 type="text"
                 id="desc_tarefa"
+                placeholder='descrição da tarefa'
                 {...register("desc_tarefa")}
                 aria-invalid={errors.desc_tarefa ? "true" : "false"}
                 aria-describedby={errors.desc_tarefa ? "desc_tarefa-error" : undefined}
@@ -138,6 +139,7 @@ export function CadTarefa() {
             {/* Status */}
             <label htmlFor="status">Status: </label>
             <select
+                readOnly
                 id="status"
                 {...register("status")}
                 aria-invalid={errors.status ? "true" : "false"}
@@ -145,8 +147,6 @@ export function CadTarefa() {
             >
                 <option value=""> Selecione o status da tarefa</option>
                 <option value="a fazer">Fazer</option>
-                <option value="fazendo">Fazendo</option>
-                <option value="pronto">Feito</option>
             </select>
             {errors.status && <p id="status-error" className='errors'> {errors.status.message}</p>}
 

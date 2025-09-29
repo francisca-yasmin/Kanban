@@ -1,8 +1,10 @@
-$background: #f4f7f9;
-$primary: #1a2b3c;
-$secondary: #7c8c9a;
-$accent: #00647a;
-$button: purple;
+$background: #FFFFFF; //fundo da tela de atividades
+$primary: #000000;
+$fundo: #DAD7CD;
+$secondary: #344E41;
+$accent: #344E41;
+
+$navbar: #A3B18A; //meu fundo da navbar
 
 $text-primary: $background;
 $text-background: $primary;
@@ -16,7 +18,7 @@ $font-size: 16px;
     }
     
 body{
-    background-color: $primary;
+    background-color: $fundo;
 }
 
 

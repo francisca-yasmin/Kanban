@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // import do axios
 import { Coluna } from './Coluna';
 import { DndContext } from '@dnd-kit/core'; // biblioteca para drag and drop -> clicar e arrastar
+import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers'
 
 export function Quadro() {
     const [tarefas, setTarefas] = useState([]);
@@ -55,11 +56,11 @@ export function Quadro() {
 
     return (
 
-        <DndContext onDragEnd={handleDragEnd}>
+        <DndContext onDragEnd={handleDragEnd} modifiers={[restrictToFirstScrollableAncestor]}>
             <main className="conteiner" role="main">
                 <h1>Minhas Tarefas</h1>
 
-                <section className="colunas" role="list">
+                <section className="colunas">
                     <Coluna id='a fazer' titulo="a fazer" tarefas={tarefasAfazer} />
                     <Coluna id='fazendo' titulo="fazendo" tarefas={tarefasFazendo} />
                     <Coluna id='pronto' titulo="pronto" tarefas={tarefasPronto} />
