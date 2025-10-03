@@ -30,3 +30,65 @@ describe("Cadastro de Tarefa", () => {
         expect(botaoCadastrar).toBeTruthy();
     });
 });
+/**
+ * import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { CadastroUsuario } from "../Paginas/CadastroUsuario";
+import { describe, it, expect } from "vitest";
+ 
+describe("CadastroUsuario", () => {
+ 
+  it("deve renderizar todos os campos do formulário", () => {
+    render(<CadastroUsuario />);
+ 
+    const nomeInput = screen.getByLabelText(/Nome/i);
+    const emailInput = screen.getByLabelText(/Email/i);
+    const botao = screen.getByRole("button", { name: /Cadastrar/i });
+ 
+    expect(nomeInput).toBeTruthy();
+    expect(emailInput).toBeTruthy();
+    expect(botao).toBeTruthy();
+  });
+ 
+  it("deve mostrar erros quando campos estiverem vazios", async () => {
+    render(<CadastroUsuario />);
+ 
+    fireEvent.click(screen.getByRole("button", { name: /Cadastrar/i }));
+ 
+    await waitFor(() => {
+      expect(screen.getByText("Informe ao menos um valor")).toBeTruthy();
+      expect(screen.getByText("Preencha o campo com seu email")).toBeTruthy();
+    });
+  });
+ 
+  it("deve mostrar erro quando o email tiver formato inválido", async () => {
+    render(<CadastroUsuario />);
+ 
+    fireEvent.input(screen.getByLabelText(/Nome/i), { target: { value: "Maria" } });
+    fireEvent.input(screen.getByLabelText(/Email/i), { target: { value: "emailinvalido" } });
+ 
+  fireEvent.submit(screen.getByRole("form") || screen.getByRole("button", { name: /Cadastrar/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/Formato de email inválido/i)).toBeTruthy();
+    });
+  });
+ 
+  it("deve resetar os campos após submissão", async () => {
+    render(<CadastroUsuario />);
+ 
+    const nomeInput = screen.getByLabelText(/Nome/i);
+    const emailInput = screen.getByLabelText(/Email/i);
+ 
+    fireEvent.input(nomeInput, { target: { value: "Maria" } });
+    fireEvent.input(emailInput, { target: { value: "maria@email.com" } });
+ 
+    fireEvent.click(screen.getByRole("button", { name: /Cadastrar/i }));
+ 
+    await waitFor(() => {
+      expect(nomeInput.value).toBe("");
+      expect(emailInput.value).toBe("");
+    });
+  });
+ 
+});
+ 
+ */
