@@ -15,7 +15,7 @@ const schemaCadUsuario = z.object({
         .max(100, 'Insira no maximo 100 caracteres')
         .regex(
             /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)+$/,
-            "Digite nome completo (nome e sobrenome), sem números ou símbolos, sem espaços no início/fim"
+            "Digite nome completo (nome e sobrenome), sem números ou símbolos, sem espaços no início e fim"
         ),
     email: z.string()
         .min(1, 'Insira seu email')

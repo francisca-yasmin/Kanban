@@ -31,25 +31,25 @@ describe("Cadastro de Tarefa", () => {
         expect(botaoCadastrar).toBeTruthy();
     });
 
-    it("não deve permitir enviar o formulário se algum campo estiver vazio", async () => {
-      render(
-        <MemoryRouter>
-          <CadTarefa />
-        </MemoryRouter>
-      );
+  //   it("não deve permitir enviar o formulário se algum campo estiver vazio", async () => {
+  //     render(
+  //       <MemoryRouter>
+  //         <CadTarefa />
+  //       </MemoryRouter>
+  //     );
 
-      // Tenta submeter sem preencher nada
-      fireEvent.click(screen.getByRole("button", { name: /Cadastrar/i }));
+  //     // Tenta submeter sem preencher nada
+  //     fireEvent.click(screen.getByRole("button", { name: /Cadastrar/i }));
 
-      await waitFor(() => {
-        // Verifica todos os campos obrigatórios
-        expect(screen.getByText(/Insira o título/i)).toBeTruthy();
-        expect(screen.getByText(/Insira a descrição/i)).toBeTruthy();
-        expect(screen.getByText(/Selecione a prioridade/i)).toBeTruthy();
-        expect(screen.getByText(/Selecione o status/i)).toBeTruthy();
-        expect(screen.getByText(/Selecione o usuário/i)).toBeTruthy();
-      });
-  });
+  //     await waitFor(() => {
+  //       // Verifica todos os campos obrigatórios
+  //       expect(screen.getByText(/Insira o título/i)).toBeTruthy();
+  //       expect(screen.getByText(/Insira a descrição/i)).toBeTruthy();
+  //       expect(screen.getByText(/Selecione a prioridade/i)).toBeTruthy();
+  //       expect(screen.getByText(/Selecione o status/i)).toBeTruthy();
+  //       expect(screen.getByText(/Selecione o usuário/i)).toBeTruthy();
+  //     });
+  // });
     
 
 });

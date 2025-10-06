@@ -210,7 +210,12 @@ describe("CadUsuario", () => {
         fireEvent.click(botaoCadastrar);
 
         await waitFor(() => {
-            expect(screen.getByText(/Digite nome completo (nome e sobrenome), sem números ou símbolos, sem espaços no início/fim/i)).toBeTruthy();
+            expect(
+                screen.getByText((content) =>
+                    content.includes("Digite nome completo") &&
+                    content.includes("sem números ou símbolos") &&
+                    content.includes("sem espaços no início e fim"))
+                ).toBeTruthy();
         });
 
         // Garante que o submit não foi feito
