@@ -194,6 +194,30 @@ describe("CadUsuario", () => {
         });
     });
 
+    it("não deve permitir enviar nome com mais de 100 caracteres", async () => {
+        render(<CadUsuario />);
+
+        const nomeInput = screen.getByLabelText(/Nome/i);
+        const emailInput = screen.getByLabelText(/Email/i);
+        const botaoCadastrar = screen.getByRole("button", { name: /Cadastrar/i });
+
+        // Preenche o nome com 101 caracteres
+        fireEvent.input(nomeInput, { target: { value: "A".repeat(101) } });
+        // Email válido para passar na validação do email
+        fireEvent.input(emailInput, { target: { value: "teste@email.com" } });
+
+        // Tenta submeter
+        fireEvent.click(botaoCadastrar);
+
+        await waitFor(() => {
+            expect(screen.getByText(/Digite nome completo (nome e sobrenome), sem números ou símbolos, sem espaços no início/fim/i)).toBeTruthy();
+        });
+
+        // Garante que o submit não foi feito
+        expect(window.alert).not.toHaveBeenCalled();
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+
 
     // ************************************** TESTE PARA O CAMPO EMAIL **************************************
     it("deve aceitar um email válido", async () => {
