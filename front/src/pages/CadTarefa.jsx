@@ -29,7 +29,7 @@ const schemaCadTarefa = z.object({
     }),
 
     usuario_id: z.number({
-        required_error: "Selecione um usuário"
+        required_error: "c"
     }).int().positive("ID do usuário inválido"), // espera id do usuário
 });
 
@@ -134,7 +134,7 @@ export function CadTarefa() {
                 <option value="media">Media</option>
                 <option value="alta">Alta</option>
             </select>
-            {errors.prioridade && <p id="prioridade-error" className='errors'> {errors.prioridade.message}</p>}
+            {errors.prioridade && <p id="prioridade-error" className='errors'>{errors.prioridade.message}</p>}
 
             {/* Status */}
             <label htmlFor="status">Status: </label>
