@@ -221,7 +221,7 @@ it("não deve permitir caracteres que não sejam letras no nome do setor", async
     fireEvent.click(screen.getByRole("button", { name: /Cadastrar/i }));
 
     await waitFor(() => {
-      expect(screen.getByText("Prioridade inválida")).toBeInTheDocument();
+      expect(screen.getByText("Selecione a prioridade da tarefa")).toBeInTheDocument();
     });
 
     expect(window.alert).not.toHaveBeenCalled();
@@ -243,7 +243,7 @@ it("não deve permitir caracteres que não sejam letras no nome do setor", async
     fireEvent.click(screen.getByRole("button", { name: /Cadastrar/i }));
 
     await waitFor(() => {
-      expect(screen.getByText("Status inválido")).toBeInTheDocument();
+      expect(screen.getByText("Selecione o status da tarefa")).toBeInTheDocument();
     });
 
     expect(window.alert).not.toHaveBeenCalled();
