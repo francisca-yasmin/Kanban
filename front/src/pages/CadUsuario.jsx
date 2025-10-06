@@ -43,14 +43,14 @@ export function CadUsuario() {
         let valor = e.target.value;
         valor = valor.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, ""); // só letras e espaço
         valor = valor.replace(/\s{2,}/g, " "); // evita espaços duplos
-        if (valor.length > 30) valor = valor.slice(0, 30); // máximo 30 chars
+        if (valor.length > 100) valor = valor.slice(0, 100); // máximo 30 chars
         setValue("nome", valor)
     };
 
     const handleEmailChange = (e) => {
         let valor = e.target.value.trim();
-        if (valor.length > 50) valor = valor.slice(0, 50); // máximo 50 chars
-        setValue("email", valor)
+        if (valor.length > 255) valor = valor.slice(0, 255); // máximo 50 chars
+        setValue("email", valor, { shouldValidate: true});
     };
 
     async function obterdados(data) {
@@ -68,7 +68,7 @@ export function CadUsuario() {
     }
 
     return (
-        <form className='formularios' onSubmit={handleSubmit(obterdados)} aria-labelledby="form-cadusuario">
+        <form role='form' className='formularios' onSubmit={handleSubmit(obterdados)} aria-labelledby="form-cadusuario">
             <h2 id="form-cadusuario">Cadastro do Usuário </h2>
 
             {/* Nome */}
