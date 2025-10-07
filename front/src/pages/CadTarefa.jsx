@@ -12,25 +12,42 @@ import { useNavigate } from 'react-router-dom'; // permite navegar entre as pág
 
 const schemaCadTarefa = z.object({
     desc_tarefa: z.string()
+        .trim()
         .min(10, 'Insira ao menos uma frase')
-        .max(100, 'Insira uma descrição válida'),
+        .max(100, 'Insira uma descrição válida')
+        .refine((val) => /[A-Za-zÀ-ÿ0-9]/.test(val), {
+        message: 'Descrição inválida: use letras ou números'
+    }),
 
     nome_setor: z.string()
+        .trim()
         .min(1, 'Insira o nome do setor')
         .max(100, 'Máximo 100 caracteres')
         .regex(/^[A-Za-zÀ-ÿ\s]+$/, 'Digite apenas letras'),
 
-    prioridade: z.enum(['baixa', 'media', 'alta'], {
-        errorMap: () => ({ message: 'Prioridade inválida' })
+    prioridade: z
+        .string()
+        .refine(val => ['baixa', 'media', 'alta'].includes(val), {
+        message: 'Prioridade inválida'
     }),
 
     status: z.enum(['a fazer', 'fazendo', 'pronto'], {
         errorMap: () => ({ message: 'Status inválido' })
     }),
 
-    usuario_id: z.number({
-        required_error: "c"
-    }).int().positive("ID do usuário inválido"), // espera id do usuário
+  usuario_id: z.preprocess((val) => {
+      // Se o valor não for número válido, transforma em undefined para disparar required_error
+      const num = Number(val);
+      return isNaN(num) ? undefined : num;
+    },
+    z.number({
+      required_error: "Escolha um usuário",
+      invalid_type_error: "Escolha um usuário",
+    })
+    .int()
+    .positive("ID do usuário inválido")
+  )
+
 });
 
 export function CadTarefa() {
@@ -95,7 +112,7 @@ export function CadTarefa() {
                     </option>
                 ))}
             </select>
-            {errors.usuario && <p id="usuario-error" className='errors'>{errors.usuario.message}</p>}
+            {errors.usuario_id && <p id="usuario-error" className='errors'>{errors.usuario_id.message}</p>}
 
             {/* Descrição da tarefa */}
             <label htmlFor="desc_tarefa">Descrição: </label>
