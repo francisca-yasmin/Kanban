@@ -446,6 +446,35 @@ it("não deve permitir envio com usuário selecionado inválido", async () => {
     expect(axios.post).not.toHaveBeenCalled();
 });
 
+  it("deve mostrar mensagem de sucesso após cadastro bem-sucedido", async () => {
+     render(
+        <MemoryRouter>
+            <CadTarefa />
+        </MemoryRouter>
+    );
 
+    // Mock do axios.post para simular sucesso
+    axios.post.mockResolvedValueOnce({ data: {} });
+
+    const descricaoInput = screen.getByLabelText(/Descrição/i);
+    const setorInput = screen.getByLabelText(/Setor/i);
+    const usuarioSelect = screen.getByLabelText(/Usuário/i);
+    const prioridadeSelect = screen.getByLabelText(/Prioridade/i);
+    const statusSelect = screen.getByLabelText(/Status/i);
+    const botaoCadastrar = screen.getByRole("button", { name: /Cadastrar/i });
+
+    // Preenche os campos com valores válidos
+    fireEvent.change(descricaoInput, { target: { value: "Descrição válida da tarefa" } });
+    fireEvent.change(nomeSetorInput, { target: { value: "TI Setor" } }); // mínimo 4 caracteres
+    fireEvent.change(usuarioSelect, { target: { value: "1" } });
+
+    const botao = screen.getByRole("button", { name: /Cadastrar/i });
+    fireEvent.click(botao);
+
+    // Espera o DOM atualizar com a mensagem de sucesso
+    await waitFor(() => {
+        expect(screen.getByText(/Tarefa cadastrada com sucesso/i)).toBeInTheDocument();
+    });
+  });
 
 });
